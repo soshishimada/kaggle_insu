@@ -34,9 +34,6 @@ def gini(actual, pred, cmpcol = 0, sortcol = 1):
 def gini_tf(pred, y):
     return gini(y, pred) / gini(y, y)
 
-
-
-
 def read_csv(file,num_line):
   row_vec = []
   labels = []
@@ -60,8 +57,6 @@ def one_hot_encode(vector):
     else:
       one_hot_vec.append(["0", "1"])
   return one_hot_vec
-
-
 
 def inference(X):
   with tf.name_scope("fc1") as scope:
@@ -111,7 +106,6 @@ def accuracy(y_inf, labels):
 
 def sad(y_inf,labels):
   diff = np.array(y_inf) - np.array(labels)
-  print diff
   abs = tf.abs(diff[:,1:2])
   sad = tf.reduce_sum(abs)
   return sad,y_inf[:,1:2],labels[:,1:2]
@@ -143,8 +137,7 @@ with tf.Graph().as_default():
   """
   training
   """
-
-  labels, vectors = read_csv('./kaggle/train.csv',100000)
+  labels, vectors = read_csv('./kaggle/train.csv',595213)
   #test_labels, test_vectors = read_csv('./kaggle/test.csv',10)
   #one_hot_labels_test = one_hot_encode(test_labels)
 
@@ -189,6 +182,8 @@ with tf.Graph().as_default():
       })
       print("train_accuracy: ", train_accuracy)
 
+
+
       """
       Early Stopping check
       """
@@ -212,9 +207,9 @@ with tf.Graph().as_default():
           keep_prob: 1.0
         })
   #print("SAD: ",sad)
- # print "Inference",inf
-  #print "labels",labels
- # print('Gini: ', gini_tf(inf,labels))
+  print "Inference",inf
+  print "labels",labels
+  print('Gini: ', gini_tf(inf,labels))
 
   with open("./kaggle/tf_submission.csv", 'wb') as resultFile:
     wr = csv.writer(resultFile, dialect='excel')
